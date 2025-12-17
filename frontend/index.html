@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Gaming Leaderboard System</title>
+  <style>
+    body { font-family: Arial; padding: 20px; }
+    table { border-collapse: collapse; width: 60%; }
+    th, td { border: 1px solid #ddd; padding: 10px; text-align: center; }
+    th { background-color: #333; color: white; }
+    button { padding: 8px 15px; margin-bottom: 15px; }
+  </style>
+</head>
+<body>
+
+<h1>Gaming Leaderboard</h1>
+<button onclick="loadLeaderboard()">Load Leaderboard</button>
+
+<table>
+  <thead>
+    <tr>
+      <th>Rank</th>
+      <th>Player Name</th>
+      <th>Score</th>
+    </tr>
+  </thead>
+  <tbody id="leaderboard">
+    <tr><td colspan="3">No data</td></tr>
+  </tbody>
+</table>
+
+<script>
+  async function loadLeaderboard() {
+    const res = await fetch("/backend/leaderboard-data.json");
+    const data = await res.json();
+
+    data.sort((a, b) => b.score - a.score);
+
+    const tbody = document.getElementById("leaderboard");
+    tbody.innerHTML = "";
+
+    data.forEach((player, index) => {
+      tbody.innerHTML += `
+        <tr>
+          <td>${index + 1}</td>
+          <td>${player.name}</td>
+          <td>${player.score}</td>
+        </tr>
+      `;
+    });
+  }
+</script>
+
+</body>
+</html>
